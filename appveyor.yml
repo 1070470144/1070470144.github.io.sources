@@ -1,15 +1,11 @@
-version: 1.0.{build}
 clone_depth: 5
+ 
 environment:
-  GIT_USER_EMAIL: 1070470144@qq.com
-  GIT_USER_NAME: 1070470144@qq.com
-  STATIC_SITE_REPO: https://github.com/1070470144/1070470144.github.io
-  TARGET_BRANCH: master
   nodejs_version: "6"
   access_token:
     secure: QlM2IckTpixeRlKXaVX7ORhyMBJNcinZor5bqYKg9GkbflMepgVCbze2 + Aevc2Sn
-    
- install:
+ 
+install:
   - ps: Install-Product node $env:nodejs_version
   - node --version
   - npm --version
@@ -34,6 +30,3 @@ on_success:
   - SETLOCAL EnableDelayedExpansion & robocopy "%APPVEYOR_BUILD_FOLDER%\public" "%TEMP%\static-site" /e & IF !ERRORLEVEL! EQU 1 (exit 0) ELSE (IF !ERRORLEVEL! EQU 3 (exit 0) ELSE (exit 1))
   - git add -A
   - if "%APPVEYOR_REPO_BRANCH%"=="master" if not defined APPVEYOR_PULL_REQUEST_NUMBER (git diff --quiet --exit-code --cached || git commit -m "Update Static Site" && git push origin %TARGET_BRANCH% && appveyor AddMessage "Static Site Updated")
-
-build:
-  verbosity: minimal
